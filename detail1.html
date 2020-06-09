@@ -1,0 +1,53 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8"/>
+
+  <title>鳥居千起|研究ノート </title>
+    <!--main.cssというファイルにhtmlのスタイルの詳細を記入し、参照している-->
+  <link rel="stylesheet" href="main.css">
+    <style type="text/css">
+        .me {
+        float: left;
+        padding: 0 1em 1em 0;
+    }
+        .info {
+            border-collapse: collapse;
+        }
+        .info th, .info td {
+            padding: 8px;
+            border: 1px solid #bec2c7;
+            text-align: left;
+        }
+        body {
+            margin: 0 auto 0 auto;
+            max-width: 960px;
+        }
+    </style>    
+</head>
+
+<h2>光センサー</h2>
+<p>光センサーを使い、暗くなったら自動的にライトが付く仕組みを作る。</p>
+
+<h2>用意するもの</h2>
+<li>Arduinoボード</li>
+<li>ブレッドボード</li>
+<li>ジャンパーワイヤー</li>
+<li>USBケーブル</li>
+<li>抵抗</li>
+<li>LED</li>
+<li>光センサー（CDSセル）</li>
+
+<h2>使ったコード</h2>
+<img src="images/code1.png">
+<p>光センサーが明るさに応じた数値を得る。明るければ数値は下がり、暗ければ上がる。真っ暗の時の数値が大体1020～1030だったので、数値が1020以上になった時にLEDが点灯するようにする。</p>
+
+<p>動かしてみる</p>
+<video src="images/right.mp4" loop autoplay muted></video>
+
+<h2>考えられる活用方法</h2>
+<p>育てている植物の付近に設置し、昼間は太陽光を浴びさせ、夜になったらLEDで光合成させる。そうすることで、成長を手助けすることが出来るのではないだろうか。<break>
+また、日当たりが悪い部屋に住んでいたり、日当たりが良い場所に植物を置けるスペースがない人でも日光不足を解決できる。</p>
+
+
+
