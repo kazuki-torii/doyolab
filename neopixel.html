@@ -1,0 +1,80 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8"/>
+
+  <title>鳥居千起|研究ノート </title>
+    <!--main.cssというファイルにhtmlのスタイルの詳細を記入し、参照している-->
+  <link rel="stylesheet" href="main.css">
+    <style type="text/css">
+        .me {
+        float: left;
+        padding: 0 1em 1em 0;
+    }
+        .info {
+            border-collapse: collapse;
+        }
+        .info th, .info td {
+            padding: 8px;
+            border: 1px solid #bec2c7;
+            text-align: left;
+        }
+        body {
+            margin: 0 auto 0 auto;
+            max-width: 960px;
+        }
+        neo{
+            max-height: 600px
+        }
+    </style>
+    
+    <h2>Neopixel</h2>
+    <p>先生に助言をいただきNeopixelをArduinoで動かしてみることになった。</p>
+    
+    <img src="images/neo2.png">
+    <img src="images/neo1.png">
+    <p>使用したNeopixelはHiLetgoのWS2812 です。5個セットで900円ぐらいでした。
+届いてから気づいたのですが、はんだ付けをしないと接続できないタイプでした…
+もっと確認するべきでしたね。</p>
+    
+    <p>はんだとはんだごてを探していたところ、なんと100均にありました。しかも結構使えます。</p>
+    <img src="images/neo3.png">
+    
+    <h2>コード</h2>
+    <img src="images/code3.png">
+    <p>#include <Adafruit_NeoPixel.h></p>
+    <p>まずNeopixcelのヘッダファイルというものをインクルードする必要がある。</p>
+    
+    <p>Adafruit_NeoPixel strip = Adafruit_NeoPixel(8, 3, NEO_GRB + NEO_KHZ800);</p>
+    <p>次にオブジェクト宣言します。８は連続したNeopixelの数（ライトの数）を表しています。使うNeopixelによって変更する必要がある。３は接続されているArduinoのピン番号です。NEO_GRB + NEO_KHZ800はNeopixelのタイプを表す値です。</p>
+    
+    <p> void setup() {
+   strip.begin();
+  }
+</p>
+    <p>strip.begin();で出力データピンの準備。</p>
+    <p>colorWipe(strip.Color(50, 50, 0), 5000);で光の明るさ（0が最も暗く、255が最も明るい）や色を決める。（0，0，0）左から赤、緑、青を表していて、色を混ぜることもできる。赤50と緑50を混ぜると黄色になった。</p>
+    
+    <p>void colorWipe(uint32_t c, uint8_t wait) {
+   for(uint16_t i=0; i＜strip.numPixels(); i++) {
+       strip.setPixelColor(i, c);
+       strip.show();
+      delay(wait);
+   }
+ }
+</p>
+    <p>このFor文を解釈するのが難しかった。
+        i=0;i＜strip.numPixels();</p>
+        <p>iはPixelの数を表している。今回使ったNeopixelのPixelは8つ。ゼロから数え始めたとしたら0～7の番号が各Pixelに振り分けられる。そしてi++は+1を表している。つまりuint16_t i=0; i＜strip.numPixels(); i++はiが0より大きかったらPixelの数を+1（次のPixelへ信号を送る）ということではないだろうか。
+</p>
+    <p>strip.setPixelColor(i, c);</p>
+    <p>iはPixelの番号、cはloop関数で指定した色を指しているのではないだろうか。</p>
+    
+    <video class="neo" src="images/neopixel.mp4" loop autoplay muted></video>
+    
+    
+    
+    
+    
+    
+    
