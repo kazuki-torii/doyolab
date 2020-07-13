@@ -1,0 +1,37 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8"/>
+
+  <title>鳥居千起|研究ノート </title>
+    <!--main.cssというファイルにhtmlのスタイルの詳細を記入し、参照している-->
+  <link rel="stylesheet" href="main.css">
+    <style type="text/css">
+        .me {
+        float: left;
+        padding: 0 1em 1em 0;
+    }
+        .info {
+            border-collapse: collapse;
+        }
+        .info th, .info td {
+            padding: 8px;
+            border: 1px solid #bec2c7;
+            text-align: left;
+        }
+        body {
+            margin: 0 auto 0 auto;
+            max-width: 960px;
+        }
+        neo{
+            max-height: 600px
+        }
+    </style>
+</head>
+
+<h2>光センサー×Neopixel</h2>
+<p>光センサーとNeopixelをなんとか組み合わせて使うことはできないかと思い取り組んだ。</p>
+
+<p>しかし、単純に組み合わせるだけでできるはずもなく、電子回路などの知識不足を感じた。なにかアウトプットを意識していたが、知識が圧倒的に足りない。</p>
+
+<p>Neopixelを光らせることはできたが、センサーと連動させることが出来ていない。光センサーも一応読み取った数値をシリアルパネルに表示させるが、明るさによって変わるわけではなく、正直何の数値を読み取っているのかわからない。</p>
