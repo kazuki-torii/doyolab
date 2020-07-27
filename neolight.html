@@ -35,3 +35,50 @@
 <p>しかし、単純に組み合わせるだけでできるはずもなく、電子回路などの知識不足を感じた。なにかアウトプットを意識していたが、知識が圧倒的に足りない。</p>
 
 <p>Neopixelを光らせることはできたが、センサーと連動させることが出来ていない。光センサーも一応読み取った数値をシリアルパネルに表示させるが、明るさによって変わるわけではなく、正直何の数値を読み取っているのかわからない。</p>
+
+<h2>7/27更新　成功できたので更新します</h2>
+
+<p>成功できなかった理由として、unitをuintとタイプミス・通信などで使われるデジタルピン0と1を使用していたことが挙げられます。</p>
+
+<p>うまくいかなかったときの対処法として、うまく作動していた部分まで戻り、何が原因か一つ一つ潰していく必要がある。</p>
+
+<p>こちらがコードになります</p>
+<code>
+<ol style="list-style:decimal-leading-zero outside;in-left:0;padding-left:36px;margin:0;background-color:#EEF;color:#000;">
+<li style="background-color:#EFF;">#include &lt;Adafruit_NeoPixel.h&gt;</li>
+<li style="background-color:#EEF;">Adafruit_NeoPixel strip = Adafruit_NeoPixel(8,3,NEO_GRB + NEO_KHZ800);</li>
+<li style="background-color:#EFF;">int photoResistor =5;</li>
+<li style="background-color:#EEF;">int bright;</li>
+<li style="background-color:#EFF;">void setup(){</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;pinMode(photoResistor,INPUT);</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;Serial.begin(9600);</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;strip.begin();</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;}</li>
+<li style="background-color:#EEF;">void loop(){</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;bright = analogRead(photoResistor);</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;Serial.println(bright);</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;if(bright &gt; 1000){</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;colorWipe(strip.Color(50,0,0),5000);</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;colorWipe(strip.Color(0,50,0),5000);</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;colorWipe(strip.Color(0,0,50),5000);</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;}</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;else{</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;colorWipe(strip.Color(0,0,0),5000);</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;colorWipe(strip.Color(0,0,0),5000);</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;colorWipe(strip.Color(0,0,0),5000);</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;}</li>
+<li style="background-color:#EFF;">}</li>
+<li style="background-color:#EEF;">void colorWipe(uint32_t c, uint8_t wait) {</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;for(uint16_t i=0; i&lt;strip.numPixels(); i++) {</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;strip.setPixelColor(i, c);</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;strip.show();</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;delay(wait);</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;}</li>
+<li style="background-color:#EEF;">}</li>
+<li style="background-color:#EFF;"></li>
+</ol></code>
+
+<p>コードは写真でGit上に表示するのではなく、HTMLとして表示するようにしました。本当はファイルごと？アップしたかったのですが、イマイチやり方がわからなかったです。</p>
+
+<p><a href="http://marginalsoft.com/tools/srctohtml/">srctohtml</a>というサイトを使えばHTML以外のコードもHTMLに変換してくれます。皆さんも使ってみてください。</p>
+
