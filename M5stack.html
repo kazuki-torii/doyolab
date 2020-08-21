@@ -1,0 +1,135 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8"/>
+
+  <title>鳥居千起|研究ノート </title>
+    <!--main.cssというファイルにhtmlのスタイルの詳細を記入し、参照している-->
+  <link rel="stylesheet" href="main.css">
+    <style type="text/css">
+        .me {
+        float: left;
+        padding: 0 1em 1em 0;
+    }
+        .info {
+            border-collapse: collapse;
+        }
+        .info th, .info td {
+            padding: 8px;
+            border: 1px solid #bec2c7;
+            text-align: left;
+        }
+        body {
+            margin: 0 auto 0 auto;
+            max-width: 960px;
+        }
+    </style>    
+</head>
+
+<h2>M5stack　×　Line</h2>
+<p>Ｍ5stackが手に入ったので早速使ってみました。
+Arduinoと違ってWiFiに接続できることができる。それを活かしてLineに通知が行くような仕組みを作った。
+    その方法として<a href = "https://ifttt.com/">IFTTT（イフト）</a>というサービスを使った。これは異なるソーシャルメディアを連携させることが出来るサービスです。
+今回はLineと接続したがTwitterやInstagram、YouTubeとも接続できる。
+</p>
+<h3>コードはこちら</h3>
+<code>
+<ol style="list-style:decimal-leading-zero outside;in-left:0;padding-left:36px;margin:0;background-color:#EEF;color:#000;">
+<li style="background-color:#EFF;">#include &lt;M5Stack.h&gt;</li>
+<li style="background-color:#EEF;">#include &lt;WiFi.h&gt;</li>
+<li style="background-color:#EFF;">#include &lt;WiFiClient.h&gt;</li>
+<li style="background-color:#EEF;">&nbsp;</li>
+<li style="background-color:#EFF;">const char* ssid     = "WiFiのSSID";</li>
+<li style="background-color:#EEF;">const char* password = "WiFiのパスワード";</li>
+<li style="background-color:#EFF;">&nbsp;</li>
+<li style="background-color:#EEF;">String makerEvent = "push_line"; // Maker Webhooks</li>
+<li style="background-color:#EFF;">String makerKey = "IFTTTと接続したときに表示されるパスワード"; // Maker Webhooks</li>
+<li style="background-color:#EEF;">&nbsp;</li>
+<li style="background-color:#EFF;">const char* server = "maker.ifttt.com";  // Server URL</li>
+<li style="background-color:#EEF;">WiFiClient client;</li>
+<li style="background-color:#EFF;">&nbsp;</li>
+<li style="background-color:#EEF;">bool checkWifiConnected() {</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;// attempt to connect to Wifi network:</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;while (WiFi.status() != WL_CONNECTED) {</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;Serial.print(".");</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;// wait 1 second for re-trying</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;delay(1000);</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;}</li>
+<li style="background-color:#EFF;">&nbsp;</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;Serial.print("Connected to ");</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;Serial.println(ssid);</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;return true;</li>
+<li style="background-color:#EFF;">}</li>
+<li style="background-color:#EEF;">&nbsp;</li>
+<li style="background-color:#EFF;">void send(String value1, String value2, String value3) {</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;while (!checkWifiConnected()) {</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;Serial.print("Attempting to connect to WiFi");</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;WiFi.begin(ssid, password);</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;}</li>
+<li style="background-color:#EEF;">&nbsp;</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;Serial.println("\nStarting connection to server...");</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;if (!client.connect(server, 80)) {</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;Serial.println("Connection failed!");</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;} else {</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;Serial.println("Connected to server!");</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;// Make a HTTP request:</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;String url = "/trigger/" + makerEvent + "/with/key/" + makerKey;</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;url += "?value1=" + value1 + "&amp;value2=" + value2 + "&amp;value3=" + value3;</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;client.println("GET " + url + " HTTP/1.1");</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;client.print("Host: ");</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;client.println(server);</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;client.println("Connection: close");</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;client.println();</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;Serial.print("Waiting for response "); //WiFiClientSecure uses a non blocking implementation</li>
+<li style="background-color:#EFF;">&nbsp;</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;int count = 0;</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;while (!client.available()) {</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;delay(50); //</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Serial.print(".");</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;}</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;// if there are incoming bytes available</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;// from the server, read them and print them:</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;while (client.available()) {</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;char c = client.read();</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Serial.write(c);</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;}</li>
+<li style="background-color:#EFF;">&nbsp;</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;// if the server's disconnected, stop the client:</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;if (!client.connected()) {</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Serial.println();</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Serial.println("disconnecting from server.");</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;client.stop();</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;}</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;}</li>
+<li style="background-color:#EFF;">}</li>
+<li style="background-color:#EEF;">&nbsp;</li>
+<li style="background-color:#EFF;">void setup() {</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;//Initialize serial and wait for port to open:</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;Serial.begin(115200);</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;delay(100);</li>
+<li style="background-color:#EFF;">&nbsp;</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;WiFi.begin(ssid, password);</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;while (!checkWifiConnected()) {</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;WiFi.begin(ssid, password);</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;}</li>
+<li style="background-color:#EEF;">}</li>
+<li style="background-color:#EFF;">&nbsp;</li>
+<li style="background-color:#EEF;">void loop() {</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;M5.update();</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;if (M5.BtnA.wasReleased()) {</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;send("LINE","test1","test2"); //任意の文字列3つ</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;M5.Lcd.println("send");</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;}</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;delay(20);</li>
+<li style="background-color:#EFF;">}</li>
+</ol></code>
+
+<p>M5stackのボタンを押すと下のような通知が行きます。</p>
+<img src="images/line.png">
+<p>これでボタンを押すことでLineに通知が行くようになった。
+
+今後、水耕栽培と連携させる案としては指定した範囲外の水温になった場合に水を取り換える通知を送る、気温を知らせるなどを考えた。
+</p>
+
+<p>参考にした<a href = "http://kyokucho1989.chillout.jp/2019/11/09/ifttt%E3%81%A7%E7%B0%A1%E5%8D%98iot%EF%BC%81m5stack%E3%81%A8line%E3%82%92%E9%80%A3%E6%90%BA%E3%81%99%E3%82%8B%E6%96%B9%E6%B3%95/">サイト</a></p>
+
