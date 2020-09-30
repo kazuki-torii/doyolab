@@ -1,0 +1,108 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8"/>
+
+  <title>鳥居千起|研究ノート </title>
+    <!--main.cssというファイルにhtmlのスタイルの詳細を記入し、参照している-->
+  <link rel="stylesheet" href="main.css">
+    <style type="text/css">
+        .me {
+        float: left;
+        padding: 0 1em 1em 0;
+    }
+        .info {
+            border-collapse: collapse;
+        }
+        .info th, .info td {
+            padding: 8px;
+            border: 1px solid #bec2c7;
+            text-align: left;
+        }
+        body {
+            margin: 0 auto 0 auto;
+            max-width: 960px;
+        }
+    </style>    
+</head>
+
+<h2>試作品2</h2>
+<p>試作品2ということで試作品1を改良し、ライトを3つに、配線を通すための穴（穴はねじの雌になっている）を追加した。</p>
+<img src="images/p1.png">
+
+<h2>筒状ねじ（雄）</h2>
+<p>　新津さんに教えてもらった<a href="https://www.youtube.com/watch?v=4uvIGwF1KfI&feature=youtu.be">動画</a>を参考して作った。
+　しかし面取りをしていなかったり、サイズの誤差によってなかなかはまらなかった。
+    上手くはめるために参考にしたサイトが<a href="https://matoyomi.hatenablog.com/entry/20180524/1527169088">こちら</a>
+</p>
+<img src="images/p2.png">
+
+<p>はめることはできたが半分ほど進むと全く動かなくなる…</p>
+<img src="images/p3.png">
+
+<p>配線を穴に通すことが出来る。</p>
+<img src="images/p4.png">
+<img src="images/p5.png">
+
+<p>今回は植物栽培のための光の色の数も調整した。<a href="http://j-mcr.net/tech/application/data/led_syokubugtsu.pdf">参考にしたサイト</a>では赤25・青6が一番よく育っているのでこの比率を取り入れた。
+実際に光らせてみる（上からと下からの図）
+</p>
+<img src="images/p6.png">
+<img src="images/p7.png">
+
+<p>コードが力技っぽくなった...他に良い方法があるはず</p>
+<p>参考にしたサイトが<a href="https://cammy.co.jp/technical/2016/01/23/arduino-007/">こちら</a></p>
+
+<code>
+<ol style="list-style:decimal-leading-zero outside;in-left:0;padding-left:36px;margin:0;background-color:#EEF;color:#000;">
+<li style="background-color:#EFF;">#include &lt;Adafruit_NeoPixel.h&gt;</li>
+<li style="background-color:#EEF;">&nbsp;</li>
+<li style="background-color:#EFF;">#define PIN 6</li>
+<li style="background-color:#EEF;">Adafruit_NeoPixel strip = Adafruit_NeoPixel(24,26, NEO_GRB + NEO_KHZ800);</li>
+<li style="background-color:#EFF;">//　　　　　　　　　　　　　　　　　　　　　　　　 　|　　|　　　|　　　　　|</li>
+<li style="background-color:#EEF;">//                                           |    |    |        +--clock</li>
+<li style="background-color:#EFF;">//                                           |    |    +---LEDの並び方</li>
+<li style="background-color:#EEF;">//                                           |    +--接続ポート     </li>
+<li style="background-color:#EFF;">//                                           +--LEDの数</li>
+<li style="background-color:#EEF;">//独立して2本までは下記のように宣言して制御可能</li>
+<li style="background-color:#EFF;">#define PIN2 7</li>
+<li style="background-color:#EEF;">Adafruit_NeoPixel strip2=Adafruit_NeoPixel(24,PIN2,NEO_GRB+NEO_KHZ800);</li>
+<li style="background-color:#EFF;">&nbsp;</li>
+<li style="background-color:#EEF;">void setup() {</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;strip.begin();</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;strip.show(); // Initialize all pixels to 'off'</li>
+<li style="background-color:#EFF;">}</li>
+<li style="background-color:#EEF;">&nbsp;</li>
+<li style="background-color:#EFF;">void loop() {</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;strip.setPixelColor(0,strip.Color(255,0,0));</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;strip.setPixelColor(1,strip.Color(255,0,0));</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;strip.setPixelColor(2,strip.Color(255,0,0));</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;strip.setPixelColor(3,strip.Color(255,0,0));</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;strip.setPixelColor(4,strip.Color(0,0,255));</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;strip.setPixelColor(5,strip.Color(255,0,0));</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;strip.setPixelColor(6,strip.Color(255,0,0));</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;strip.setPixelColor(7,strip.Color(255,0,0));</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;strip.setPixelColor(8,strip.Color(255,0,0));</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;strip.setPixelColor(9,strip.Color(0,0,255));</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;strip.setPixelColor(10,strip.Color(255,0,0));</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;strip.setPixelColor(11,strip.Color(255,0,0));</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;strip.setPixelColor(12,strip.Color(255,0,0));</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;strip.setPixelColor(13,strip.Color(255,0,0));</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;strip.setPixelColor(14,strip.Color(0,0,255));</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;strip.setPixelColor(15,strip.Color(255,0,0));</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;strip.setPixelColor(16,strip.Color(255,0,0));</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;strip.setPixelColor(17,strip.Color(255,0,0));</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;strip.setPixelColor(18,strip.Color(255,0,0));</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;strip.setPixelColor(19,strip.Color(0,0,255));</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;strip.setPixelColor(20,strip.Color(255,0,0));</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;strip.setPixelColor(21,strip.Color(255,0,0));</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;strip.setPixelColor(22,strip.Color(255,0,0));</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;strip.setPixelColor(23,strip.Color(255,0,0));</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;strip.setPixelColor(24,strip.Color(0,0,255));</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// |      | </li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// |      </li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// +--LED番号</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;strip.show();</li>
+<li style="background-color:#EFF;">} </li>
+</ol></code>
+
